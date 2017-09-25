@@ -4,15 +4,12 @@ import { render } from 'react-dom';
 import Item from '../components/Item';
 import { Body } from '../components/Body';
 
+import { _updateCost } from '../actions/updateCost';
+
 import { connect } from 'react-redux';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-
-  _onGreet(){
+_onGreet(){
     alert('This is in the parent component being passed to the child component through props.')
     // in child component this should be accessed through this.props
   }
@@ -36,8 +33,8 @@ class App extends React.Component {
                 id={i}
                 initialItemName={item.itemName}
                 initialItemCost={item.itemCost}
-                itemRequirement={item.itemRequirement}
                 updateName={this._onUpdateName.bind(this)}
+                updateCost={this.props.updateCost}
                 >
               </Item>)}
             {this.props.items.map((item, i) =>
@@ -63,11 +60,8 @@ const mapStateToProp = (state) => {
 
 const mapDispatchToProp = (dispatch) => {
   return {
-    updateName: (name) => {
-      dispatch({
-        type: "UPDATE_NAME",
-        payload: name
-      })
+    updateCost: (id) => {
+      dispatch(_updateCost(id))
     }
   };
 }

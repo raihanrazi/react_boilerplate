@@ -5,19 +5,7 @@ export default class Item extends React.Component {
     super();
     this.state = {
       itemName: props.initialItemName,
-      itemCost: props.initialItemCost,
-      itemRequirement: props.itemRequirement
     }
-  }
-
-  _updateCost() {
-    this.setState({
-      itemCost: this.state.itemCost + 10000
-    })
-    // store.dispatch({
-    //   type: "UPDATE_COST",
-    //   payload: 2000
-    // })
   }
 
   _onChangeHandler(e) {
@@ -30,6 +18,10 @@ export default class Item extends React.Component {
     this.props.updateName(this.props.id, this.state.itemName);
   }
 
+  _updateCost() {
+    this.props.updateCost(this.props.id)
+  }
+
   render() {
     return (
       <nav className="navbar navbar-default">
@@ -37,8 +29,7 @@ export default class Item extends React.Component {
           <div className="navbar-header">
             <ul className="nav navbar-nav">
               <li><a href="#">{this.state.itemName}</a></li>
-              <li><a href="#">${this.state.itemCost}</a></li>
-              <li><a href="#">{this.state.itemRequirement}</a></li>
+              <li><a href="#">${this.props.initialItemCost}</a></li>
             </ul>
             <input
               type="text"
