@@ -8,14 +8,16 @@ export default class Item extends React.Component {
       itemCost: props.initialItemCost,
       itemRequirement: props.itemRequirement
     }
-
-    this._updateCost = this._updateCost.bind(this)
   }
 
   _updateCost() {
     this.setState({
       itemCost: this.state.itemCost + 10000
     })
+    // store.dispatch({
+    //   type: "UPDATE_COST",
+    //   payload: 2000
+    // })
   }
 
   _onChangeHandler(e) {
@@ -44,8 +46,7 @@ export default class Item extends React.Component {
               onChange={(e) => this._onChangeHandler(e)}
             />
             <button onClick={this._updateName.bind(this)} className="btn btn-primary">Update Name</button>
-            <button onClick={this._updateCost} className="btn btn-primary">Update Cost</button>
-            <button onClick={this.props.greet} className="btn btn-secondary">Greet</button>
+            <button onClick={this._updateCost.bind(this)} className="btn btn-primary">Update Cost</button>
           </div>
         </div>
       </nav>

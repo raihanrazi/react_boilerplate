@@ -1,73 +1,77 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import Item from './components/Item'
-import {Body} from './components/Body'
+import  App from './containers/App';
+import { Provider } from 'react-redux';
+import { createLogger } from 'redux-logger';
 
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: [
-        {
-          itemName: "House",
-          itemCost: 5000000,
-          itemRequirement: true
-        },
-        {
-          itemName: "Car",
-          itemCost: 500000,
-          itemRequirement: true
-        },
-        {
-          itemName: "Boat",
-          itemCost: 50000,
-          itemRequirement: false
-        },
-      ]
-    }
-  }
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 
-
-  _onGreet(){
-    alert('This is in the parent component being passed to the child component through props.')
-    // in child component this should be accessed through this.props
-  }
-
-  _onUpdateName(id, updatedName){
-    var stateCopy = Object.assign({}, this.state);
-    stateCopy.items[id].itemName = updatedName;
-    this.setState(stateCopy);
-    console.log(this.state);
-  }
-
-  render() {
-    return (
-      <div className="container">
-        <div className="row">
-          <div className="col-xs-10 col-xs-offset-1">
-            {this.state.items.map((item, i) =>
-              <Item
-                key={i}
-                id={i}
-                initialItemName={item.itemName}
-                initialItemCost={item.itemCost}
-                itemRequirement={item.itemRequirement}
-                updateName={this._onUpdateName.bind(this)}
-                greet={this._onGreet}
-                >
-              </Item>)}
-            {this.state.items.map((item, i) =>
-              <Body
-                key={i}
-                itemName={item.itemName}
-                >
-              </Body>)}
-          </div>
-        </div>
-      </div>
-    );
-  }
+const initialState = {
+  items: [
+    {
+      itemName: "House",
+      itemCost: 350000,
+    },
+    {
+      itemName: "Car",
+      itemCost: 25000,
+    },
+    {
+      itemName: "Boat",
+      itemCost: 50000,
+    },
+  ]
 }
 
-render(<App />, window.document.getElementById("app"));
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    case "UPDATE_COST":
+      var newData = state.items.map(dat => {
+                  if(dat.itemName == 'Boat')
+                     return Object.assign({}, dat, {itemCost:action.payload})
+                  return dat
+              });
+
+      state = {
+        ...state,
+        items: newData
+      };
+      break;
+    case "UPDATE_NAME":
+    var newData = state.items.map(dat => {
+                if(dat.itemName == 'Boat')
+                   return Object.assign({}, dat, {itemName:action.payload})
+                return dat
+            });
+
+    state = {
+      ...state,
+      items: newData
+    };
+    break;
+  }
+  return state;
+};
+
+
+const store = createStore(combineReducers({reducer}), applyMiddleware(createLogger()));
+
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+  , window.document.getElementById("app"));
+
+
+
+
+// store.dispatch({
+//   type: "UPDATE_PRICE",
+//   payload: 2000
+// })
+//
+// store.dispatch({
+//   type: "UPDATE_NAME",
+//   payload: "Samsung S9"
+// })
